@@ -74,6 +74,7 @@ bool TaskChain::isInChain(long long int taskID)
 
 std::ostream& operator<<(std::ostream& out, const TaskChain& taskChain)
 {
+	// Ispisi lanac zadataka 
 	out << "Task Chain: " << std::endl;
 
 	for (long long int task = 0; task < taskChain.tasks.size() - 1; task++)

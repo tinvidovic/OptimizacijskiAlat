@@ -20,7 +20,7 @@ unsigned long long int findGreatestCommonDivisorOfVector(std::vector<unsigned lo
     // Provjeri da li je ulaz prazan
     if (inputs.size() == 0)
     {
-        throw std::invalid_argument("The inputs vector is empty!");
+        throw std::invalid_argument("Ulazni vektor je prazan!");
     }
 
     long long int result = inputs.at(0);
@@ -44,7 +44,7 @@ unsigned long long int findLeastCommonMultiple(std::vector<unsigned long long in
     // Provjeri da li je ulaz prazan
     if (inputs.size() == 0)
     {
-        throw std::invalid_argument("The inputs vector is empty!");
+        throw std::invalid_argument("Ulazni vektor je prazan!");
     }
 
     //Pronadji NZD svih ulaza
@@ -63,7 +63,7 @@ unsigned long long int findLeastCommonMultiple(std::vector<unsigned long long in
         // Rekurzivno izracunaj NZS za nove vrijednosti
         if (findGreatestCommonDivisor(inputs.at(i), LCM) == 0)
         {
-            throw std::domain_error("Division by zero!");
+            throw std::domain_error("Dijeljenje nulom!");
         }
         LCM = (((inputs.at(i) * LCM)) / (findGreatestCommonDivisor(inputs.at(i), LCM)));
 

@@ -5,6 +5,7 @@
 #include "Task.h"
 #include "TaskInstance.h"
 #include "TaskChain.h"
+#include "TaskSet.h"
 
 
 
@@ -14,13 +15,8 @@ int main(int, const char* []) {
     {
 
         Task task1(0, 0, 2, 6);
-        
-        TaskInstance ti1(&task1, 0);
-        TaskInstance ti2(&task1, 1);
-
         Task task2(1, 2, 3, 6);
 
-        TaskInstance ti3(&task2, 0);
 
         Task task3(1, 2, 3, 24);
 
@@ -28,7 +24,13 @@ int main(int, const char* []) {
         taskChain1.addTask(&task1);
         taskChain1.addTasks({ &task2, &task3 });
 
-        std::cout << taskChain1 << std::endl;
+        TaskSet taskSet1(0);
+        taskSet1.addTasks({ &task1});
+        
+        TaskSet taskSet2(1);
+        taskSet2.addTasks({ &task2 , &task3 });
+
+        std::cout << taskSet1 << std::endl << taskSet2;
 
     }
     catch (const std::exception& e)

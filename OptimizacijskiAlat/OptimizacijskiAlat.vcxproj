@@ -144,6 +144,7 @@
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="TaskChain.cpp" />
     <ClCompile Include="TaskInstance.cpp" />
+    <ClCompile Include="TaskSet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
@@ -151,6 +152,7 @@
     <ClInclude Include="Task.h" />
     <ClInclude Include="TaskChain.h" />
     <ClInclude Include="TaskInstance.h" />
+    <ClInclude Include="TaskSet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

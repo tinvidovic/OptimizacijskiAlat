@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Klasa koja opisuje jednu instancu zadatka u ugradbenoj aplikaciji
 * Jedna instanca je opisana sa nekoliko atributa i to:
 * Tip zadatka kojem instanca pripada
@@ -21,7 +21,7 @@ using std::string;
 class TaskInstance
 {
 private:
-	Task* task; // Tip zadatka kojem instanca pripada
+	Task task = Task(0, 0, 0, 1); // Tip zadatka kojem instanca pripada
 	long long int absolute_release_time; // Absolutno vrijeme oslobađanja instance
 	long long int absolute_deadline; // Absolutni rok za izvršavanje instance
 	long long int number_of_instance; // Broj instance (u jednom hiperperiodu)
@@ -37,12 +37,12 @@ public:
 
 	// Konstruktor
 
-	TaskInstance(Task* t_task, long long int t_number_of_instance);
+	TaskInstance(Task t_task, long long int t_number_of_instance);
 
 
 	// Setteri
 
-	void setTask(Task* t_task);
+	void setTask(Task t_task);
 
 	void setAbsoluteReleaseTime(long long int t_absolute_release_time);
 
@@ -67,7 +67,7 @@ public:
 
 	// Getteri
 
-	Task* getTask() const;
+	Task getTask() const;
 
 	long long int getAbsoluteReleaseTime() const;
 

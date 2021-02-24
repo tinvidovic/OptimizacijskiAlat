@@ -1,9 +1,5 @@
 #include "Helper.h"
-#include "iostream"
-#include "math.h"
-#include <algorithm>
-#include<random>
-#include <ctime>
+
 
 unsigned long long int findGreatestCommonDivisor(unsigned long long int a, unsigned long long int b)
 {
@@ -73,7 +69,53 @@ unsigned long long int findLeastCommonMultiple(std::vector<unsigned long long in
     return LCM * GCD;
 }
 
-/*
+int roulleteWheelSelecetion(std::vector<double> probabilities)
+{
+
+    if (probabilities.size() == 0)
+    {
+        throw std::invalid_argument("Ulazni vektor je prazan!");
+    }
+
+    // spocetna bvrijednost
+    double totalSumOfProbabilities = 0.0;
+
+
+    // Izracunaj totalnu sumu
+    for (int i = 0; i < probabilities.size(); i++)
+    {
+        totalSumOfProbabilities += probabilities[i];
+    }
+
+
+    double sum = probabilities[0];
+    int index = 0;
+
+
+    // generisi random broj u itnervalu [0, totalSumOfProbailities]
+    std::random_device rd;
+
+    std::mt19937 gen(rd());
+
+    std::uniform_real_distribution<double> distribution(0., totalSumOfProbabilities);
+
+    double number = distribution(gen);
+
+
+    // vrati index na koji roulette wheel pokazuje
+    while (sum < number)
+    {
+        index += 1;
+
+        sum += probabilities[index];
+
+    }
+
+    return index;
+
+}
+
+
 int findIndex(std::vector<int> values, int value)
 {
 
@@ -90,125 +132,20 @@ int findIndex(std::vector<int> values, int value)
     return index;
 }
 
-
-
-
-
-
-int getFirstDigit(int number)
-{
-    if (number >= 0 && number < 1000) return 0;
-
-    else return number / 1000;
-
-}
-
-int getSecondDigit(int number)
+bool allDifferent(std::vector<int> inputs)
 {
 
-    if (number >= 0 && number < 100) return 0;
-    else
+    if (inputs.size() == 1) return true;
+
+    for (int i = 0; i < inputs.size(); i++)
     {
-        return (number - getFirstDigit(number) * 1000) / 100;
+        for (int j = i + 1; j < inputs.size(); j++)
+        {
+            if (inputs.at(i) == inputs.at(j)) return false;
+        }
     }
-}
 
-int getThirdDigit(int number)
-{
-    if (number < 10) return 0;
-
-    else return (number - getFirstDigit(number) * 1000 - getSecondDigit(number) * 100) / 10;
-
-}
-
-int getFourthDigit(int number)
-{
-    if (number < 10) return number;
-
-    else return (number - getFirstDigit(number) * 1000 - getSecondDigit(number) * 100 - getThirdDigit(number) * 10) / 1;
-
-}
-
-bool intervalsOverlap(long long int a1, long long int a2, long long int b1, long long int b2)
-{
-    if (b1 > a2 || a1 > b2) return false;
-    else return true;
-}
-
-bool follows(TaskInstance a, TaskInstance b)
-{
     return true;
-}
-
-void showVectorInt(std::vector<int> vec)
-{
-    for (int i = 0; i < vec.size(); i++)
-    {
-        std::cout << vec.at(i) << "  ";
-    }
-
-    std::cout << std::endl;
-
-}
-
-void showVector(std::vector<double> vec)
-{
-    for (int i = 0; i < vec.size(); i++)
-    {
-        std::cout << vec.at(i) << "  ";
-    }
-
-    std::cout << std::endl;
-}
-
-void showMatrix(std::vector<std::vector<double> > matrix)
-{
-    for (int i = 0; i < matrix.size(); i++)
-    {
-        for (int j = 0; j < matrix.at(i).size(); j++)
-        {
-            std::cout << matrix.at(i).at(j) << "  ";
-        }
-        std::cout << std::endl << std::endl;
-    }
-}
-
-std::vector<std::vector<double> > repmat(std::vector<std::vector<double> > mat, int rows, int columns)
-{
-
-    int oldRowSize = mat.size();
-
-    int oldColumnSize = mat.at(0).size();
-
-    // replicate rows
-    for (int row = 0; row < rows - 1; row++)
-    {
-
-        for (int i = 0; i < oldRowSize; i++)
-        {
-
-            std::vector<double> matRow = mat.at(i);
-
-            mat.push_back(matRow);
-        }
-    }
-
-    // replicate columns
-
-    for (int column = 0; column < columns - 1; column++)
-    {
-        for (int i = 0; i < mat.size(); i++)
-        {
-            for (int j = 0; j < oldColumnSize; j++)
-            {
-                mat.at(i).push_back(mat.at(i).at(j));
-            }
-        }
-
-
-    }
-
-    return mat;
 }
 
 std::vector<std::vector<double>> generateTaskUtilization(double n, double u)
@@ -551,50 +488,42 @@ std::vector<std::vector<double>> generateTaskUtilization(double n, double u)
 
 }
 
-
-int roulleteWheelSelecetion(std::vector<double> probabilities)
+std::vector<std::vector<double> > repmat(std::vector<std::vector<double> > mat, int rows, int columns)
 {
-    // check if input is empty
-    if (probabilities.size() == 0)
+
+    int oldRowSize = mat.size();
+
+    int oldColumnSize = mat.at(0).size();
+
+    // replicate rows
+    for (int row = 0; row < rows - 1; row++)
     {
-        throw std::invalid_argument("The input vector is empty!");
+
+        for (int i = 0; i < oldRowSize; i++)
+        {
+
+            std::vector<double> matRow = mat.at(i);
+
+            mat.push_back(matRow);
+        }
     }
 
-    // starting value
-    double totalSumOfProbabilities = 0.0;
+    // replicate columns
 
-
-    // update total sum
-    for (int i = 0; i < probabilities.size(); i++)
+    for (int column = 0; column < columns - 1; column++)
     {
-        totalSumOfProbabilities += probabilities[i];
-    }
+        for (int i = 0; i < mat.size(); i++)
+        {
+            for (int j = 0; j < oldColumnSize; j++)
+            {
+                mat.at(i).push_back(mat.at(i).at(j));
+            }
+        }
 
-
-    double sum = probabilities[0];
-    int index = 0;
-
-
-    // generate a random number in range [0, totalSumOfProbailities]
-    std::random_device rd;
-
-    std::mt19937 gen(rd());
-
-    std::uniform_real_distribution<double> distribution(0., totalSumOfProbabilities);
-
-    double number = distribution(gen);
-
-
-    // return the index of where on the roulette wheel it landed
-    while (sum < number)
-    {
-        index += 1;
-
-        sum += probabilities[index];
 
     }
 
-    return index;
+    return mat;
 }
 
 bool setsIntersect(std::set<int> a, std::set<int> b)
@@ -603,11 +532,17 @@ bool setsIntersect(std::set<int> a, std::set<int> b)
     set_intersection(a.begin(), a.end(), b.begin(), b.end(),
         std::back_inserter(common_data));
 
-    if (common_data.size() == 0) return false; // no data in set intersection, return false
+    if (common_data.size() == 0) return false; // nema podataka u presjeku skupova, vrati false
     else return true;
 }
 
-bool canCommunicate(TaskInstance producer, TaskInstance consumer)
+bool intervalsOverlap(long long int a1, long long int a2, long long int b1, long long int b2)
+{
+    if (b1 > a2 || a1 > b2) return false;
+    else return true;
+}
+
+bool canCommunicate(TaskInstance& producer, TaskInstance& consumer)
 {
     // Determine DataWrite Interval of producer
     long long int startOfProducerDataWriteInterval = producer.getAbsoluteReleaseTime() + producer.getTask().getWorstCaseExecutionTime();
@@ -623,4 +558,94 @@ bool canCommunicate(TaskInstance producer, TaskInstance consumer)
     return intervalsOverlap(startOfProducerDataWriteInterval, endOfProducerDataWriteInterval, startOfConsumerDataReadInterval, endOfConsumerDataRadInterval);
 
 }
+/*
+
+
+
+
+
+
+int getFirstDigit(int number)
+{
+    if (number >= 0 && number < 1000) return 0;
+
+    else return number / 1000;
+
+}
+
+int getSecondDigit(int number)
+{
+
+    if (number >= 0 && number < 100) return 0;
+    else
+    {
+        return (number - getFirstDigit(number) * 1000) / 100;
+    }
+}
+
+int getThirdDigit(int number)
+{
+    if (number < 10) return 0;
+
+    else return (number - getFirstDigit(number) * 1000 - getSecondDigit(number) * 100) / 10;
+
+}
+
+int getFourthDigit(int number)
+{
+    if (number < 10) return number;
+
+    else return (number - getFirstDigit(number) * 1000 - getSecondDigit(number) * 100 - getThirdDigit(number) * 10) / 1;
+
+}
+
+
+
+bool follows(TaskInstance a, TaskInstance b)
+{
+    return true;
+}
+
+void showVectorInt(std::vector<int> vec)
+{
+    for (int i = 0; i < vec.size(); i++)
+    {
+        std::cout << vec.at(i) << "  ";
+    }
+
+    std::cout << std::endl;
+
+}
+
+void showVector(std::vector<double> vec)
+{
+    for (int i = 0; i < vec.size(); i++)
+    {
+        std::cout << vec.at(i) << "  ";
+    }
+
+    std::cout << std::endl;
+}
+
+void showMatrix(std::vector<std::vector<double> > matrix)
+{
+    for (int i = 0; i < matrix.size(); i++)
+    {
+        for (int j = 0; j < matrix.at(i).size(); j++)
+        {
+            std::cout << matrix.at(i).at(j) << "  ";
+        }
+        std::cout << std::endl << std::endl;
+    }
+}
+
+
+
+
+
+
+
+
+
+
 */

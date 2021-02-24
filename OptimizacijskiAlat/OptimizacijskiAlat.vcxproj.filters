@@ -13,12 +13,36 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{205911c5-2952-465d-9a40-44b6ebfbb7a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sat">
+      <UniqueIdentifier>{ac5bf1a9-ad9f-4fb6-91f6-6782b30594e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="linear_solver">
+      <UniqueIdentifier>{0cb63923-2e38-4a7b-958f-31624098df31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="graph">
+      <UniqueIdentifier>{7ab0226c-8968-46e3-947a-5c8fdd5d2738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="glop">
+      <UniqueIdentifier>{1f30e1cf-78cc-44ff-ad47-130bff1e4013}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{8474e40e-e534-49ea-a1da-57ab463cc559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="constraint_solver">
+      <UniqueIdentifier>{fca0274d-e596-4b3f-972f-241d97d6c1a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bop">
+      <UniqueIdentifier>{a4287bb5-e858-41c7-8103-e392a19cfecf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Task.cpp">
+    <ClCompile Include="OptimizacijskiAlat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OptimizacijskiAlat.cpp">
+    <ClCompile Include="Task.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TaskInstance.cpp">
@@ -27,10 +51,19 @@
     <ClCompile Include="Helper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TaskSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="TaskChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TaskSet.cpp">
+    <ClCompile Include="TestGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,17 +74,85 @@
     <ClInclude Include="TaskInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TaskChain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Helper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TaskSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskChain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="util\optional_boolean.proto">
+      <Filter>util</Filter>
+    </None>
+    <None Include="sat\sat_parameters.proto">
+      <Filter>sat</Filter>
+    </None>
+    <None Include="sat\cp_model.proto">
+      <Filter>sat</Filter>
+    </None>
+    <None Include="sat\boolean_problem.proto">
+      <Filter>sat</Filter>
+    </None>
+    <None Include="linear_solver\linear_solver.proto">
+      <Filter>linear_solver</Filter>
+    </None>
+    <None Include="graph\flow_problem.proto">
+      <Filter>graph</Filter>
+    </None>
+    <None Include="glop\parameters.proto">
+      <Filter>glop</Filter>
+    </None>
+    <None Include="data\rcpsp.proto">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\jobshop_scheduling.proto">
+      <Filter>data</Filter>
+    </None>
+    <None Include="constraint_solver\solver_parameters.proto">
+      <Filter>constraint_solver</Filter>
+    </None>
+    <None Include="constraint_solver\search_stats.proto">
+      <Filter>constraint_solver</Filter>
+    </None>
+    <None Include="constraint_solver\search_limit.proto">
+      <Filter>constraint_solver</Filter>
+    </None>
+    <None Include="constraint_solver\routing_parameters.proto">
+      <Filter>constraint_solver</Filter>
+    </None>
+    <None Include="constraint_solver\routing_enums.proto">
+      <Filter>constraint_solver</Filter>
+    </None>
+    <None Include="constraint_solver\demon_profiler.proto">
+      <Filter>constraint_solver</Filter>
+    </None>
+    <None Include="constraint_solver\assignment.proto">
+      <Filter>constraint_solver</Filter>
+    </None>
+    <None Include="bop\bop_parameters.proto">
+      <Filter>bop</Filter>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="orLogo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

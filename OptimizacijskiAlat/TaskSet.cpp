@@ -30,11 +30,11 @@ void TaskSet::setInstances()
 	for (long long int i = 0; i < tasks.size(); i++)
 	{
 
-		for (long long int j = 1; j <= this->getHyperperiod() / tasks.at(i)->getPeriod(); j++)
+		for (long long int j = 1; j <= this->getHyperperiod() / tasks.at(i).getPeriod(); j++)
 		{
 			//Kreiraj pokazivac na instancu
 
-			TaskInstance* taskInstance = new TaskInstance(tasks.at(i), j);
+			TaskInstance taskInstance(tasks.at(i), j);
 
 			// Dodaj ga u vektor instanci
 			instances.push_back(taskInstance);
@@ -44,15 +44,25 @@ void TaskSet::setInstances()
 
 // Getteri
 
-std::vector<Task *> TaskSet::getTasks() { return tasks; };
+std::vector<Task> TaskSet::getTasks() { return tasks; };
 
 long long int TaskSet::getCore() { return core; }
 
 long long int TaskSet::getHyperperiod() { return hyperperiod; }
 
-std::vector<TaskInstance *> TaskSet::getInstances()
+std::vector<TaskInstance> TaskSet::getInstances()
 {
 	return instances;
+}
+
+Task TaskSet::getTaskById(int id)
+{
+	for (int i = 0; i < tasks.size(); i++)
+	{
+		if (tasks.at(i).getId() == id) return tasks.at(i);
+	}
+
+	return Task(0, 0, 0, 0);
 }
 
 // Metode
@@ -60,34 +70,33 @@ std::vector<TaskInstance *> TaskSet::getInstances()
 void TaskSet::addTask(Task * t_task)
 {
 
-	//Check if task already added
-	for (long long int i = 0; i < tasks.size(); i++)
-	{
 
-		if (tasks.at(i)->getId() == t_task->getId()) return;
+	if (!isInSet(*t_task, *this))
+	{
+		t_task->setCore(this->getCore());
+		tasks.push_back(*t_task);
+		
+
 	}
 
-	tasks.push_back(t_task);
 
 	setHyperperiod(calculateHyperperiod()); // Nakon svakog novog dodavanja zadatka ponovo izracunaj i postavi hiperperiod
 	setInstances();
 }
 
-void TaskSet::addTasks(std::vector<Task*> t_tasks)
+void TaskSet::addTasks(std::vector<Task> t_tasks)
 {
 
 	//Dodaj zadatke
 	for (long long int i = 0; i < t_tasks.size(); i++)
 	{
-		// Provjeri da li je zadatak vec dodan
-		bool alreadyAdded = false;
-		for (long long int j = 0; j < tasks.size(); j++)
+
+		if (!isInSet(t_tasks.at(i), *this))
 		{
-
-			if (tasks.at(j)->getId() == t_tasks.at(i)->getId()) alreadyAdded = true;
+			t_tasks.at(i).setCore(this->getCore());
+			tasks.push_back(t_tasks.at(i));
+			
 		}
-
-		if (!alreadyAdded) tasks.push_back(t_tasks.at(i));
 	}
 
 	setHyperperiod(calculateHyperperiod()); // Nakon svakog novog dodavanja zadatka ponovo izracunaj i postavi hiperperiod
@@ -98,13 +107,13 @@ void TaskSet::addTasks(std::vector<Task*> t_tasks)
 long long int TaskSet::calculateHyperperiod()
 {
 
-	if (tasks.size() == 1) return tasks.at(0)->getPeriod(); // Ako je samo jedan zadatak u setu
+	if (tasks.size() == 1) return tasks.at(0).getPeriod(); // Ako je samo jedan zadatak u setu
 
-	std::vector<unsigned long long int> periods; // Vektor koji sadrži periode svih zadataka u lancu (bez duplikata)
+	std::vector<unsigned long long int> periods; // Vektor koji sadrï¿½i periode svih zadataka u lancu (bez duplikata)
 
 	for (long long int i = 0; i < tasks.size(); i++)
 	{
-		long long int period = tasks.at(i)->getPeriod();
+		long long int period = tasks.at(i).getPeriod();
 		bool isNewPeriodValue = true;
 
 		for (long long int j = 0; j < periods.size(); j++)
@@ -119,13 +128,14 @@ long long int TaskSet::calculateHyperperiod()
 
 }
 
+
 std::ostream& operator<<(std::ostream& out, const TaskSet& taskSet)
 {
 	// Ispisi zadatke
 	out << "Tasks: " << std::endl;
 	for (int i = 0; i < taskSet.tasks.size(); i++)
 	{
-		out << (*taskSet.tasks.at(i)) << std::endl;
+		out << (taskSet.tasks.at(i)) << std::endl;
 	}
 
 	// Ispisi hiperperiod
@@ -142,18 +152,38 @@ std::ostream& operator<<(std::ostream& out, const TaskSet& taskSet)
 	out << "Instances: " << std::endl;
 	for (int i = 0; i < taskSet.instances.size(); i++)
 	{
-		out << (*taskSet.instances.at(i)) << std::endl;
+
 
 		// Kada predjemo na slijedeci zadatak ispisi novi red
 		if (i > 0)
 		{
-			if (taskSet.instances.at(i - 1)->getTask()->getId() != taskSet.instances.at(i)->getTask()->getId())
+			if (taskSet.instances.at(i - 1).getTask().getId() != taskSet.instances.at(i).getTask().getId())
 			{
 				out << std::endl;
 			}
 		}
-		
+
+		out << (taskSet.instances.at(i)) << std::endl;
+
 	}
 
 	return out;
+}
+
+long long int getTotalHyperperiod(std::vector<TaskSet>& taskSets)
+{
+	std::vector<unsigned long long int> hyperperiods;
+	for (int i = 0; i < taskSets.size(); i++)
+	{
+		if (taskSets.at(i).getHyperperiod() != 0) hyperperiods.push_back(taskSets.at(i).getHyperperiod());
+	}
+
+	return findLeastCommonMultiple(hyperperiods);
+}
+
+bool isInSet(Task t_task, TaskSet& taskSet)
+{
+	if (t_task.getCore() == taskSet.getCore()) return true;
+
+	return false;
 }

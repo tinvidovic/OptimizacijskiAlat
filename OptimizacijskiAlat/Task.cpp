@@ -1,8 +1,10 @@
-﻿// Implemenatacija klase Task
+// Implemenatacija klase Task
 
 #include "Task.h"
 
 // Konstruktor
+
+int max_id = 1;
 
 Task::Task(long long int t_worst_case_read, long long int t_worst_case_execute, long long int t_worst_case_write, long long int t_period)
 {
@@ -24,6 +26,7 @@ Task::Task(long long int t_worst_case_read, long long int t_worst_case_execute, 
 
 	return;
 }
+
 
 // Setteri
 
@@ -47,7 +50,7 @@ void Task::setName()
 
 void Task::setWorstCaseRead(long long int t_worst_case_read)
 {
-	if ( t_worst_case_read < 0 ) throw std::invalid_argument("Najgore vrijeme za izvrsenje faze citanja zadatka mora biti > 0!");
+	if (t_worst_case_read < 0) throw std::invalid_argument("Najgore vrijeme za izvrsenje faze citanja zadatka mora biti > 0!");
 
 	worst_case_read = t_worst_case_read;
 
@@ -59,7 +62,7 @@ void Task::setWorstCaseRead(long long int t_worst_case_read)
 
 void Task::setWorstCaseExecute(long long int t_worst_case_execute)
 {
-	if ( t_worst_case_execute < 0 ) throw std::invalid_argument("Najgore vrijeme za izvrsenje faze egzekucije zadatka mora biti > 0!");
+	if (t_worst_case_execute < 0) throw std::invalid_argument("Najgore vrijeme za izvrsenje faze egzekucije zadatka mora biti > 0!");
 
 	worst_case_execute = t_worst_case_execute;
 
@@ -72,7 +75,7 @@ void Task::setWorstCaseExecute(long long int t_worst_case_execute)
 void Task::setWorstCaseWrite(long long int t_worst_case_write)
 {
 
-	if ( t_worst_case_write < 0 ) throw std::invalid_argument("Najgore vrijeme za izvrsenje faze pisanja zadatka mora biti > 0!");
+	if (t_worst_case_write < 0) throw std::invalid_argument("Najgore vrijeme za izvrsenje faze pisanja zadatka mora biti > 0!");
 
 	worst_case_write = t_worst_case_write;
 
@@ -86,7 +89,7 @@ void Task::setWorstCaseWrite(long long int t_worst_case_write)
 void Task::setPeriod(long long int t_period)
 {
 
-	if ( t_period <= 0 ) throw std::invalid_argument("Period zadatka mora biti > 0!");
+	if (t_period <= 0) throw std::invalid_argument("Period zadatka mora biti > 0!");
 
 	period = t_period;
 
@@ -96,11 +99,16 @@ void Task::setPeriod(long long int t_period)
 void Task::setDeadline(long long int t_deadline)
 {
 
-	if ( t_deadline != period ) throw std::invalid_argument("Relativni rok za izvrsenje zadatka mora biti jednak periodu zadatka!");
+	if (t_deadline != period) throw std::invalid_argument("Relativni rok za izvrsenje zadatka mora biti jednak periodu zadatka!");
 
 	deadline = t_deadline;
 
 	return;
+}
+
+void Task::setCore(int t_core)
+{
+	core = t_core;
 }
 
 // Getteri
@@ -119,6 +127,8 @@ long long int Task::getPeriod() const { return period; }
 
 long long int Task::getDeadline() const { return deadline; }
 
+int Task::getCore() const { return core; }
+
 // Metode
 
 long long int Task::getWorstCaseExecutionTime() const
@@ -131,8 +141,8 @@ long long int Task::getWorstCaseExecutionTime() const
 // OPERATORS
 std::ostream& operator<<(std::ostream& out, const Task& task)
 {
-	out << task.getName().c_str() << ", WC Read: " << task.getWorstCaseRead() << ", WC Execute: " << task.getWorstCaseExecute() << ", WC Write: " << task.getWorstCaseWrite() << ", Period: " 
-		<< task.getPeriod()  << ", Utilization: " << (double)(task.getWorstCaseExecutionTime()) / task.getPeriod() << std::endl;
+	out << task.getName().c_str() << ", WC Read: " << task.getWorstCaseRead() << ", WC Execute: " << task.getWorstCaseExecute() << ", WC Write: " << task.getWorstCaseWrite() << ", Period: "
+		<< task.getPeriod() << ", Utilization: " << (double)(task.getWorstCaseExecutionTime()) / task.getPeriod() << std::endl;
 
 	return out;
 }

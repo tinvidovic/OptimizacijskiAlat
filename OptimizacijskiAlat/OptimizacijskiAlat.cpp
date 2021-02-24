@@ -1,37 +1,37 @@
-#include <string>
-#include <cstring>
+// OptimizacijskiAlat.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
 #include <iostream>
-#include <vector>
 #include "Task.h"
 #include "TaskInstance.h"
 #include "TaskChain.h"
 #include "TaskSet.h"
-
-
+#include "TestGenerator.h"
+#include "Model.h"
+#include "Data.h"
 
 int main(int, const char* []) {
 
     try
     {
 
-        Task task1(0, 0, 2, 6);
-        Task task2(1, 2, 3, 6);
+        std::vector<TaskSet> taskSets;
+        std::vector<TaskChain> taskChains;
+
+        int numberOfTasks = 4;
+        int numberOfChains = 1;
+
+        std::vector<double> coreUtilizations = { 0.5, 0.5};
 
 
-        Task task3(1, 2, 3, 24);
+        taskSets = TestCaseIndustrial(taskChains);
 
-        TaskChain taskChain1;
-        taskChain1.addTask(&task1);
-        taskChain1.addTasks({ &task2, &task3 });
+        int status;
+        int constraints;
+        createAndSolveModel(taskSets, taskChains, 1, status, constraints, 600);
 
-        TaskSet taskSet1(0);
-        taskSet1.addTasks({ &task1});
-        
-        TaskSet taskSet2(1);
-        taskSet2.addTasks({ &task2 , &task3 });
-
-        std::cout << taskSet1 << std::endl << taskSet2;
-
+        generateTestCase(taskSets, taskChains, 4, 1, coreUtilizations);
+        createAndSolveModel(taskSets, taskChains, 1, status, constraints, 600);
     }
     catch (const std::exception& e)
     {
@@ -41,3 +41,4 @@ int main(int, const char* []) {
 
     return 0;
 }
+

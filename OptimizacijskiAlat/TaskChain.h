@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Klasa koja opisuje jedan lanac zadataka u ugradbenoj aplikaciji
 * Jedan lanac zadataka je opisan sa nekoliko atributa i to:
 * vektorom zadataka koji se nalaze u lancu
@@ -16,7 +16,7 @@
 class TaskChain
 {
 private:
-	std::vector<Task *> tasks; // Vektor zadataka koji se nalaze u lancu
+	std::vector<Task> tasks; // Vektor zadataka koji se nalaze u lancu
 	long long int hyperperiod; // Hiperperiod lanca zadataka
 
 	// Privatna metoda koja postavlja vrijednost atributa hyperperiod na zeljenu vrijednost (poziva se samo iz klase TaskChain)
@@ -31,22 +31,24 @@ public:
 	TaskChain();
 
 	// Getteri
-	std::vector<Task *> getTasks();
+	std::vector<Task> getTasks();
 
 	long long int getHyperperiod();
 
 	// Metode
 
 	// Metoda kojom se proslijeđeni vektor zadataka dodaje u niz taskova
-	void addTasks(std::vector<Task*> t_tasks);
+	void addTasks(std::vector<Task> t_tasks);
 
 	// Metoda kojom se proslijeđeni zadatak dodaje u niz taskova
-	void addTask(Task* t_task);
+	void addTask(Task t_task);
 
 
 	// Metoda koja vraca true ako se proslijeđeni task nalazi u datom lancu zadataka
-	bool isInChain(long long int taskID);
+	bool isInChain(Task * t_task);
 
+	// Metoda koja vraca true ako se proslijeđeni task nalazi u datom lancu zadataka
+	bool isInChain(int taskID);
 
 	// Operatori
 

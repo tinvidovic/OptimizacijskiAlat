@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Klasa koja opisuje jedan zadatak u ugradbenoj aplikaciji
 * Jedan zadatak je opisan sa nekoliko atributa i to:
 * ID zadatka
@@ -12,10 +12,11 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include "Constants.h"
 
 using std::string;
 
-static int max_id = 1;
+extern int max_id;
 
 #pragma once
 class Task
@@ -28,6 +29,7 @@ private:
 	long long int worst_case_write = 0; // Najgore vrijeme za izvršenje faze pisanja zadatka
 	long long int period; // Period zadatka
 	long long int deadline; // Relativni rok za izvršenje zadatka (period == deadline)
+	int core = -1; // Jezgra na koju je zadatak alociran, postavljeno na -1 prije alokacije
 
 
 public:
@@ -35,7 +37,6 @@ public:
 	//Konstruktori
 
 	Task(long long int t_worst_case_read, long long int t_worst_case_execute, long long int t_worst_case_write, long long int t_period);
-
 
 	// Setteri
 
@@ -53,6 +54,8 @@ public:
 
 	void setDeadline(long long int t_deadline);
 
+	void setCore(int t_core);
+
 	// Getteri
 
 	long long int getId() const;
@@ -69,6 +72,7 @@ public:
 
 	long long int getDeadline() const;
 
+	int getCore() const;
 
 	// Metode
 

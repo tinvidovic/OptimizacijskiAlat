@@ -4,15 +4,15 @@
 
 // Konstruktor
 
-TaskInstance::TaskInstance(Task* t_task, long long int t_number_of_instance)
+TaskInstance::TaskInstance(Task t_task, long long int t_number_of_instance)
 {
 	setTask(t_task);
 
 	setNumberOfInstance(t_number_of_instance);
 
-	setAbsoluteReleaseTime((t_number_of_instance - 1) * task->getPeriod());
+	setAbsoluteReleaseTime((t_number_of_instance - 1) * task.getPeriod());
 
-	setAbsoluteDeadline(t_number_of_instance * task->getPeriod());
+	setAbsoluteDeadline(t_number_of_instance * task.getPeriod());
 
 	setName();
 
@@ -23,7 +23,7 @@ TaskInstance::TaskInstance(Task* t_task, long long int t_number_of_instance)
 // Setteri
 
 
-void TaskInstance::setTask(Task* t_task)
+void TaskInstance::setTask(Task t_task)
 {
 	task = t_task;
 
@@ -33,7 +33,7 @@ void TaskInstance::setTask(Task* t_task)
 
 void TaskInstance::setAbsoluteReleaseTime(long long int t_absolute_release_time)
 {
-	if (t_absolute_release_time != (this->getNumberOfInstance() - 1) * this->getTask()->getPeriod()) throw std::invalid_argument("Neispravno absolutno vrijeme oslobadjanja!");
+	if (t_absolute_release_time != (this->getNumberOfInstance() - 1) * this->getTask().getPeriod()) throw std::invalid_argument("Neispravno absolutno vrijeme oslobadjanja!");
 
 	absolute_release_time = t_absolute_release_time;
 
@@ -43,7 +43,7 @@ void TaskInstance::setAbsoluteReleaseTime(long long int t_absolute_release_time)
 void TaskInstance::setAbsoluteDeadline(long long int t_absolute_deadline)
 {
 
-	if (t_absolute_deadline != this->getNumberOfInstance() * this->getTask()->getPeriod()) throw std::invalid_argument("Neispravan absolutni rok za izvršenje instance!");
+	if (t_absolute_deadline != this->getNumberOfInstance() * this->getTask().getPeriod()) throw std::invalid_argument("Neispravan absolutni rok za izvrï¿½enje instance!");
 
 	absolute_deadline = t_absolute_deadline;
 
@@ -53,7 +53,7 @@ void TaskInstance::setAbsoluteDeadline(long long int t_absolute_deadline)
 void TaskInstance::setNumberOfInstance(long long int t_number_of_instance)
 {
 
-	if(t_number_of_instance < 0) throw std::invalid_argument("Broj instance ne moze biti negativan!");
+	if (t_number_of_instance < 0) throw std::invalid_argument("Broj instance ne moze biti negativan!");
 	number_of_instance = t_number_of_instance;
 
 	return;
@@ -61,7 +61,7 @@ void TaskInstance::setNumberOfInstance(long long int t_number_of_instance)
 
 void TaskInstance::setName()
 {
-	name = task->getName() + "_" + std::to_string(this->getNumberOfInstance());
+	name = task.getName() + "_" + std::to_string(this->getNumberOfInstance());
 
 	return;
 }
@@ -69,7 +69,7 @@ void TaskInstance::setName()
 void TaskInstance::setStartOfRead(long long int t_start_of_read)
 {
 	//TODO: fix boundaries
-	if (t_start_of_read < this->getAbsoluteReleaseTime() || t_start_of_read > this->getAbsoluteDeadline() ) throw std::invalid_argument("Neispravan pocetak faze citanja!");
+	if (t_start_of_read < this->getAbsoluteReleaseTime() || t_start_of_read > this->getAbsoluteDeadline()) throw std::invalid_argument("Neispravan pocetak faze citanja!");
 
 	start_of_read = t_start_of_read;
 
@@ -123,7 +123,7 @@ void TaskInstance::setEndOfWrite(long long int t_end_of_write)
 
 // Getteri
 
-Task* TaskInstance::getTask() const { return task; }
+Task TaskInstance::getTask() const { return task; }
 
 long long int TaskInstance::getAbsoluteReleaseTime() const { return absolute_release_time; }
 
@@ -165,11 +165,11 @@ long long int TaskInstance::getEndOfWrite() const
 
 // Operatori
 
-// Operator << za željeni ispisni stream
+// Operator << za ï¿½eljeni ispisni stream
 std::ostream& operator<<(std::ostream& out, const TaskInstance& task_instance)
 {
 	out << task_instance.getName() << "Read ( " << task_instance.getStartOfRead() << ", " << task_instance.getEndOfRead() << ")" << " Execute ( " << task_instance.getStartOfExecute() << ", "
 		<< task_instance.getEndOfExecute() << ")" << " Write( " << task_instance.getStartOfWrite() << ", " << task_instance.getEndOfWrite() << ")" << std::endl;
 
-    return out;
+	return out;
 }

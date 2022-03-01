@@ -1,5 +1,7 @@
 # OptimizacijskiAlat
 
+A solution written in C++ using the Google OR-Tools librbary that creates a Constraint Programming (CP) problem based on the input in the form of a dual-core embedded system application. The optimization engine then attempts to find a schedule for the embedded systems application with minimized inter-core data-propagation delays. The application is complete with a synthetic test generator.
+
 ## Setup
 
 In order to use the solution the following steps are necessary:

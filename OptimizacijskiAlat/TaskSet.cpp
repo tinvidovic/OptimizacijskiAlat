@@ -20,6 +20,8 @@ void TaskSet::setCore(long long int t_core)
 void TaskSet::setHyperperiod(long long int t_hyperperiod)
 {
 	hyperperiod = t_hyperperiod;
+
+	this->setInstances();
 }
 
 void TaskSet::setInstances()
@@ -67,7 +69,7 @@ Task TaskSet::getTaskById(int id)
 
 // Metode
 
-void TaskSet::addTask(Task * t_task)
+void TaskSet::addTask(Task* t_task)
 {
 
 
@@ -75,7 +77,7 @@ void TaskSet::addTask(Task * t_task)
 	{
 		t_task->setCore(this->getCore());
 		tasks.push_back(*t_task);
-		
+
 
 	}
 
@@ -95,7 +97,7 @@ void TaskSet::addTasks(std::vector<Task> t_tasks)
 		{
 			t_tasks.at(i).setCore(this->getCore());
 			tasks.push_back(t_tasks.at(i));
-			
+
 		}
 	}
 

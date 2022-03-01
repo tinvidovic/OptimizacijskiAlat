@@ -120,7 +120,7 @@ bool correctAmountOfCommunicatingInstances(std::vector<TaskSet> taskSets, std::v
 		}
 	}
 
-	std::cout << "Target Communicating Instances: " << n << " Generated communicating instances: " << numberOfInstances << std::endl;
+	//std::cout << "Target Communicating Instances: " << n << " Generated communicating instances: " << numberOfInstances << std::endl;
 
 	return numberOfInstances == n;
 }
@@ -495,7 +495,7 @@ void generateTestCase(std::vector<TaskSet>& taskSets, std::vector<TaskChain>& ta
 
 	} while (!correctAmountOfCommunicatingInstances(taskSets, taskChains, numberOfCommunicatingProducerConsumerInstances)); // check if the number of instances and communicating instances is correct
 
-	std::cout << "SUCCESS!" <<std::endl << "Generated test case: ";
+	std::cout << "SUCCESS!" << std::endl << "Generated test case: ";
 
 	for (int i = 0; i < taskSets.size(); i++)
 	{

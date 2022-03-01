@@ -39,7 +39,7 @@ std::vector<TaskSet>  TestCase2(std::vector<TaskChain>& chains)
     Task task1(1, 1, 1, 12);
     Task task2(1, 1, 1, 12);
     Task task3(1, 1, 1, 12);
-    
+
 
 
 

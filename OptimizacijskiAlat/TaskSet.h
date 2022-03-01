@@ -49,7 +49,7 @@ public:
 	// Metode
 
 	// Metoda koja dodaje jedan zadatak u set zadataka
-	void addTask(Task * t_task);
+	void addTask(Task* t_task);
 
 	// Metoda koja dodaje vise zadataka u set zadataka
 	void addTasks(std::vector<Task> t_tasks);

@@ -60,7 +60,7 @@ void TaskChain::addTask(Task t_task)
 	setHyperperiod(calculateHyperperiod()); // Nakon svakog novog dodavanja zadatka ponovo izracunaj i postavi hiperperiod
 }
 
-bool TaskChain::isInChain(Task * t_task)
+bool TaskChain::isInChain(Task* t_task)
 {
 
 	for (int task = 0; task < this->getTasks().size(); task++)
@@ -85,6 +85,12 @@ bool TaskChain::isInChain(int taskID)
 	}
 
 	return false;
+}
+
+bool TaskChain::isLastInChain(int taskID)
+{
+
+	return this->getTasks()[this->getTasks().size() - 1].getId() == taskID;
 }
 
 std::ostream& operator<<(std::ostream& out, const TaskChain& taskChain)

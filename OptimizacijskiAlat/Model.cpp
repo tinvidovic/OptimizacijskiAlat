@@ -19,12 +19,17 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
 
     long long int hyperPeriod = 0;
 
-    
-   
+
+
 
     // Treba razmatrati ukupni hiperperiod
     hyperPeriod = getTotalHyperperiod(taskSets);
 
+    for (int i = 0; i < taskSets.size(); i++) {
+
+        taskSets.at(i).setHyperperiod(hyperPeriod);
+    }
+    
     // Broj jezgri
     int numberOfCores = taskSets.size();
 
@@ -34,7 +39,7 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
     for (int i = 0; i < numberOfCores; i++)
     {
         numberInstancesCore.push_back(taskSets.at(i).getInstances().size());
-        
+
     }
 
 
@@ -96,7 +101,7 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
     for (int core = 0; core < numberOfCores; core++)
     {
 
-        
+
         for (int i = 0; i < numberInstancesCore.at(core); i++)
         {
             TaskInstance currentInstance = taskSets.at(core).getInstances().at(i);
@@ -259,6 +264,21 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
                 }
             }
 
+            // Check if it is always a consumer
+            bool isAlwaysLastInChain;
+            if (isInAnyChain) {
+                isAlwaysLastInChain = true;
+                for (int chain = 0; chain < taskChains.size(); chain++)
+                {
+                    if (!taskChains.at(chain).isLastInChain(currentInstance.getTask().getId()))
+                    {
+                        isAlwaysLastInChain = false;
+                        break;
+                    }
+                }
+
+            }
+
             // Kreiraj ekstra varijablu iz prethodnog hiperperioda za zadatke u lancima
             if (i != numberInstancesCore.at(core) - 1)
             {
@@ -268,7 +288,7 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
                 {
 
 
-                    if (isInAnyChain)
+                    if (isInAnyChain && !isAlwaysLastInChain)
                     {
 
 
@@ -303,7 +323,7 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
             else
             {
 
-                if (isInAnyChain)
+                if (isInAnyChain && !isAlwaysLastInChain)
                 {
 
 
@@ -336,7 +356,7 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
 
         }
 
-            
+
         numberOfIntervalVar = 0;
     }
 
@@ -425,7 +445,7 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
                                     firstTime = false;
 
                                     int lastProducerInstanceIndex = producerInstanceIndex;
-                                    while (instancesOnProducersCore.at(lastProducerInstanceIndex).getNumberOfInstance()  * instancesOnProducersCore.at(lastProducerInstanceIndex).getTask().getPeriod() != taskSets.at(producerCoreAssignedTo).getHyperperiod())
+                                    while (instancesOnProducersCore.at(lastProducerInstanceIndex).getNumberOfInstance() * instancesOnProducersCore.at(lastProducerInstanceIndex).getTask().getPeriod() != taskSets.at(producerCoreAssignedTo).getHyperperiod())
                                     {
                                         lastProducerInstanceIndex++;
                                     }
@@ -481,16 +501,8 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
                                 }
                                 // Kreiraj Zi constraintove
 
-                                const Domain startZi(-40 * hyperPeriod, 40 * hyperPeriod);
-                                const sat::IntVar zi = cpModelBuilder.NewIntVar(startZi);
 
-
-
-                                cpModelBuilder.AddEquality(zi, sat::LinearExpr::ScalProd({ phasesOfInstancesOnCore.at(consumerCoreAssignedTo)[(long long int) NUMBER_OF_PHASES * consumerInstanceIndex].StartVar(), phasesOfInstancesOnCore.at(producerCoreAssignedTo)[(long long int) NUMBER_OF_PHASES * producerInstanceIndex + 2].EndVar() }, { 1, -1 }));
-
-                                consumerProducerPairVariablesForConsumer.push_back(zi);
-
-                                consumerProducerPairVariablesForConsumerGlobal.push_back(zi);
+                                
 
 
                                 // Provjeri da li instance mogu komunicirati
@@ -500,6 +512,19 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
 
                                 if (canCommunicate(currentInstanceOnProducersCore, currentInstanceOnConsumersCore))
                                 {
+                                    
+                                    const Domain startZi(-40 * hyperPeriod, 40 * hyperPeriod);
+                                    const sat::IntVar zi = cpModelBuilder.NewIntVar(startZi);
+
+
+
+                                    cpModelBuilder.AddEquality(zi, sat::LinearExpr::ScalProd({ phasesOfInstancesOnCore.at(consumerCoreAssignedTo)[(long long int) NUMBER_OF_PHASES * consumerInstanceIndex].StartVar(), phasesOfInstancesOnCore.at(producerCoreAssignedTo)[(long long int) NUMBER_OF_PHASES * producerInstanceIndex + 2].EndVar() }, { 1, -1 }));
+
+                                    consumerProducerPairVariablesForConsumer.push_back(zi);
+
+                                    consumerProducerPairVariablesForConsumerGlobal.push_back(zi);
+
+
                                     long long int lowerBound = startOfConsumer - endOfProducer;
 
                                 }
@@ -522,13 +547,13 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
 
                     for (int consumerProducerPairIndex = 0; consumerProducerPairIndex < consumerProducerPairVariablesForConsumer.size() - 1; consumerProducerPairIndex++)
                     {
-                        const Domain startHelper(-40 * hyperPeriod, 40 * hyperPeriod);
+                        const Domain startHelper(0, 4 * hyperPeriod);
                         const sat::IntVar helper = cpModelBuilder.NewIntVar(startHelper);
 
                         const sat::BoolVar b = cpModelBuilder.NewBoolVar();
 
                         cpModelBuilder.AddLessThan(consumerProducerPairVariablesForConsumer[(long long int) consumerProducerPairIndex + (long long int)1], 0).OnlyEnforceIf(b);
-                        cpModelBuilder.AddGreaterOrEqual(consumerProducerPairVariablesForConsumer[(long long int) consumerProducerPairIndex + (long long int)1], 0).OnlyEnforceIf(Not(b));
+                        //cpModelBuilder.AddGreaterOrEqual(consumerProducerPairVariablesForConsumer[(long long int) consumerProducerPairIndex + (long long int)1], 0).OnlyEnforceIf(Not(b));
 
                         const Domain startHelper2(-40 * hyperPeriod, 40 * hyperPeriod);
                         const sat::IntVar helper2 = cpModelBuilder.NewIntVar(startHelper2);
@@ -536,7 +561,7 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
                         cpModelBuilder.AddAbsEquality(helper2, consumerProducerPairVariablesForConsumer[consumerProducerPairIndex]);
 
 
-                        cpModelBuilder.AddEquality(helper, sat::LinearExpr::Sum({ consumerProducerPairVariablesForConsumer[consumerProducerPairIndex], helper2 })).OnlyEnforceIf(b);
+                        //cpModelBuilder.AddEquality(helper, sat::LinearExpr::Sum({ consumerProducerPairVariablesForConsumer[consumerProducerPairIndex], helper2 })).OnlyEnforceIf(b);
                         cpModelBuilder.AddEquality(helper, 0).OnlyEnforceIf(Not(b));
 
                         helperVariables.push_back(helper);
@@ -548,11 +573,11 @@ double createAndSolveModel(std::vector<TaskSet>& taskSets, std::vector<TaskChain
         }
 
     }
-    
+
 
     // Kreiraj funkciju cilja
 
-    const Domain objVarDomain(0, consumerProducerPairVariablesForConsumerGlobal.size()* hyperPeriod);
+    const Domain objVarDomain(0, consumerProducerPairVariablesForConsumerGlobal.size() * hyperPeriod);
     const sat::IntVar  objVar = cpModelBuilder.NewIntVar(objVarDomain);
 
     cpModelBuilder.AddEquality(objVar, sat::LinearExpr::Sum(helperVariables));

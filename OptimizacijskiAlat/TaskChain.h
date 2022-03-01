@@ -45,10 +45,12 @@ public:
 
 
 	// Metoda koja vraca true ako se proslijeđeni task nalazi u datom lancu zadataka
-	bool isInChain(Task * t_task);
+	bool isInChain(Task* t_task);
 
 	// Metoda koja vraca true ako se proslijeđeni task nalazi u datom lancu zadataka
 	bool isInChain(int taskID);
+
+	bool isLastInChain(int taskID);
 
 	// Operatori
 
